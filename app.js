@@ -43,7 +43,6 @@ $(document).ready(function() {
     const url = edit === false ? 'task-add.php' : 'task-edit.php';
     console.log(postData, url);
     $.post(url, postData, (response) => {
-      console.log(response);
       $('#task-form').trigger('reset');
       fetchTasks();
     });
@@ -85,6 +84,7 @@ $(document).ready(function() {
     const element = $(this)[0].activeElement.parentElement.parentElement;
     const id = $(element).attr('taskId');
     $.post('task-single.php', {id}, (response) => {
+      console.log(response);
       const task = JSON.parse(response);
       $('#name').val(task.name);
       $('#description').val(task.description);
