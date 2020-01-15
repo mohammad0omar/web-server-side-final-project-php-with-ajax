@@ -1,5 +1,4 @@
 <?php
-
   include('database.php');
 
   $query = "SELECT * from task";

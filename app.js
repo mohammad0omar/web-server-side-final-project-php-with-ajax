@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
   // Global Settings
   let edit = false;
 
@@ -6,29 +6,27 @@ $(document).ready(function() {
   console.log('jquery is working!');
   fetchTasks();
   $('#task-result').hide();
-
-
   // search key type event
-  $('#search').keyup(function() {
-    if($('#search').val()) {
+  $('#search').keyup(function () {
+    if ($('#search').val()) {
       let search = $('#search').val();
       $.ajax({
         url: 'task-search.php',
-        data: {search},
+        data: { search },
         type: 'POST',
         success: function (response) {
-          if(!response.error) {
+          if (!response.error) {
             let tasks = JSON.parse(response);
             let template = '';
             tasks.forEach(task => {
               template += `
                      <li><a href="#" class="task-item">${task.name}</a></li>
-                    ` 
+                    `
             });
             $('#task-result').show();
             $('#container').html(template);
           }
-        } 
+        }
       })
     }
   });
@@ -41,7 +39,7 @@ $(document).ready(function() {
       id: $('#taskId').val()
     };
     const url = edit === false ? 'task-add.php' : 'task-edit.php';
-    console.log(postData, url);
+    //console.log(postData, url);
     $.post(url, postData, (response) => {
       $('#task-form').trigger('reset');
       fetchTasks();
@@ -53,7 +51,7 @@ $(document).ready(function() {
     $.ajax({
       url: 'tasks-list.php',
       type: 'GET',
-      success: function(response) {
+      success: function (response) {
         const tasks = JSON.parse(response);
         let template = '';
         tasks.forEach(task => {
@@ -83,12 +81,12 @@ $(document).ready(function() {
   $(document).on('click', '.task-item', (e) => {
     const element = $(this)[0].activeElement.parentElement.parentElement;
     const id = $(element).attr('taskId');
-    $.post('task-single.php', {id}, (response) => {
+    $.post('task-single.php', { id }, (response) => {
       console.log(response);
       const task = JSON.parse(response);
       $('#name').val(task.name);
       $('#description').val(task.description);
-      $('#taskId').val(task.id);
+      $('#taskId').val(1);
       edit = true;
     });
     e.preventDefault();
@@ -96,10 +94,10 @@ $(document).ready(function() {
 
   // Delete a Single Task
   $(document).on('click', '.task-delete', (e) => {
-    if(confirm('Are you sure you want to delete it?')) {
+    if (confirm('Are you sure you want to delete it?')) {
       const element = $(this)[0].activeElement.parentElement.parentElement;
       const id = $(element).attr('taskId');
-      $.post('task-delete.php', {id}, (response) => {
+      $.post('task-delete.php', { id }, (response) => {
         fetchTasks();
       });
     }
