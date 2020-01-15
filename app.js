@@ -5,6 +5,7 @@ $(document).ready(function () {
   // Testing Jquery
   console.log('jquery is working!');
   fetchTasks();
+  checklogin();
   $('#task-result').hide();
   // search key type event
   $('#search').keyup(function () {
@@ -39,13 +40,23 @@ $(document).ready(function () {
       id: $('#taskId').val()
     };
     const url = edit === false ? 'task-add.php' : 'task-edit.php';
-    //console.log(postData, url);
+    console.log(postData, url);
     $.post(url, postData, (response) => {
       $('#task-form').trigger('reset');
       fetchTasks();
     });
   });
-
+  //login checkeking function 
+  function checklogin() {
+    let checker;
+    $.ajax({
+      url: 'loginchecker.php',
+      type: 'GET',
+      success: function (response) {
+        console.log(JSON.parse(response));
+      }
+    })
+  }
   // Fetching Tasks
   function fetchTasks() {
     $.ajax({
