@@ -53,7 +53,10 @@ $(document).ready(function () {
       url: 'loginchecker.php',
       type: 'GET',
       success: function (response) {
-        console.log(JSON.parse(response));
+        const status = JSON.parse(response);
+        if (!status[0].logedin) {
+          window.location.href = "login.html"
+        }
       }
     })
   }
