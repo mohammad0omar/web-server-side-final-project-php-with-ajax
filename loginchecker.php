@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(isset($_SESSION['login_user'])){
+if(isset($_SESSION['username'])){
     $logedin = true;
 }
 else $logedin = false;
