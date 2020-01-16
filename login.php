@@ -1,12 +1,26 @@
 <?php
 session_start();
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    
-    $_SESSION['username']=$_POST['username'];
-    // 86400 = 1 day
-    $_SESSION['password']=$_POST['password'];
-    
-    if(isset($_SESSION['username']))
-        header('location: index.html');
-}
+include('database.php');
+$username = $_POST['username'];
+$password = $_POST['password'];
+$query = "SELECT * FROM users WHERE username = '$username' AND password = '$password' " ;
+  $result = mysqli_query($connection, $query);
+  if(!$result) {
+    die('Query Failed'. mysqli_error($connection));
+    echo("failed");
+  }
+  $json = array();
+  while($row = mysqli_fetch_array($result)) {
+    $json[] = array(
+        'username' => $row['username'],
+        'password' => $row['password']
+    );
+  }
+  if($json){
+    $_SESSION['username']=$username;
+    header('location: index.html');
+  }
+  else{
+    header('location: login.html'); 
+  }  
 ?>
