@@ -1,12 +1,26 @@
 $(document).ready(function () {
   // Global Settings
   let edit = false;
-
   // Testing Jquery
   console.log('jquery is working!');
   fetchTasks();
   checklogin();
   $('#task-result').hide();
+  function checklogin() {
+    let checker;
+    $.ajax({
+      url: 'loginchecker.php',
+      type: 'GET',
+      success: function (response) {
+        const status = JSON.parse(response);
+        if (!status[0].logedin) {
+          window.location.href = "login.html"
+        }
+        $('#username').text("welcome to " + status[0].username);
+        console.log(status[0].username);
+      }
+    })
+  }
   // search key type event
   $('#search').keyup(function () {
     if ($('#search').val()) {
@@ -40,28 +54,14 @@ $(document).ready(function () {
       id: $('#taskId').val()
     };
     const url = edit === false ? 'task-add.php' : 'task-edit.php';
+    console.log("postData");
     console.log(postData, url);
     $.post(url, postData, (response) => {
       $('#task-form').trigger('reset');
       fetchTasks();
     });
   });
-  //login checkeking function 
-  function checklogin() {
-    let checker;
-    $.ajax({
-      url: 'loginchecker.php',
-      type: 'GET',
-      success: function (response) {
-        const status = JSON.parse(response);
-        if (!status[0].logedin) {
-          window.location.href = "login.html"
-        }
-        $('#username').text("welcome to " + status[0].username);
-        console.log(status[0].username);
-      }
-    })
-  }
+
   // Fetching Tasks
   function fetchTasks() {
     $.ajax({
@@ -97,12 +97,13 @@ $(document).ready(function () {
   $(document).on('click', '.task-item', (e) => {
     const element = $(this)[0].activeElement.parentElement.parentElement;
     const id = $(element).attr('taskId');
+    console.log(id);
     $.post('task-single.php', { id }, (response) => {
       console.log(response);
       const task = JSON.parse(response);
       $('#name').val(task.name);
       $('#description').val(task.description);
-      $('#taskId').val(1);
+      $('#taskId').val(task.id);
       edit = true;
     });
     e.preventDefault();

@@ -5,7 +5,9 @@ if(isset($_SESSION['username'])){
     $logedin = true;
     $username = $_SESSION['username'];
 }
-else $logedin = false;
+else {
+  $logedin = false;
+}
 $json = array();
 $json[] = array(
     'logedin' => $logedin,
@@ -14,3 +16,7 @@ $json[] = array(
 $jsonstring = json_encode($json); 
 echo $jsonstring;
 ?>
+
+
+
+
