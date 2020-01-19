@@ -16,7 +16,7 @@ $(document).ready(function () {
         if (!status[0].logedin) {
           window.location.href = "login.html"
         }
-        $('#username').text("welcome to " + status[0].username);
+        $('#username').text("welcome " + status[0].username);
         console.log(status[0].username);
       }
     })
