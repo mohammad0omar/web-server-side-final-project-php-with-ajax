@@ -2,7 +2,7 @@ $(document).ready(function () {
   // Global Settings
   let edit = false;
   // Testing Jquery
-  console.log('jquery is working!');
+  console.log('working!');
   fetchTasks();
   checklogin();
   $('#task-result').hide();
@@ -17,7 +17,7 @@ $(document).ready(function () {
           window.location.href = "login.html"
         }
         $('#username').text("welcome " + status[0].username);
-        console.log(status[0].username);
+       // console.log(status[0].username);
       }
     })
   }
@@ -61,7 +61,37 @@ $(document).ready(function () {
       fetchTasks();
     });
   });
-
+  $("#upload").on('submit', (function (e) {
+    e.preventDefault();
+    $.ajax({
+      url: "uploadExcel.php",
+      type: "POST",
+      data: new FormData(this),
+      contentType: false,
+      cache: false,
+      processData: false,
+      beforeSend: function () {
+        //$("#preview").fadeOut();
+        $("#err").fadeOut();
+      },
+      success: function (data) {
+        if (data == 'invalid') {
+          // invalid file format.
+          $("#err").html("Invalid File !").fadeIn();
+        }
+        else {
+          // view uploaded file.
+          //$("#preview").html(data).fadeIn();
+          $("#upload")[0].reset();
+          fetchTasks();
+         //console.log(data)
+        }
+      },
+      error: function (e) {
+        $("#err").html(e).fadeIn();
+      }
+    });
+  }));
   // Fetching Tasks
   function fetchTasks() {
     $.ajax({
@@ -97,9 +127,9 @@ $(document).ready(function () {
   $(document).on('click', '.task-item', (e) => {
     const element = $(this)[0].activeElement.parentElement.parentElement;
     const id = $(element).attr('taskId');
-    console.log(id);
+   // console.log(id);
     $.post('task-single.php', { id }, (response) => {
-      console.log(response);
+      // console.log(response);
       const task = JSON.parse(response);
       $('#name').val(task.name);
       $('#description').val(task.description);
